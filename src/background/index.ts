@@ -60,16 +60,15 @@ async function handleMessage(message: WdkRequest): Promise<WdkResponse> {
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.alarms.create('wdk-wallet-background-ready', { delayInMinutes: 1 })
-  void configureActionSurface()
 })
 
-chrome.runtime.onStartup.addListener(() => {
-  void configureActionSurface()
-})
-
-chrome.action.onClicked.addListener((tab) => {
-  void openWalletSurface(tab)
-})
+if (chrome.sidePanel?.setPanelBehavior) {
+  void chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
+} else {
+  chrome.action.onClicked.addListener((tab) => {
+    void openWalletSurface(tab)
+  })
+}
 
 chrome.alarms.onAlarm.addListener((alarm) => {
   walletSession.handleAlarm(alarm.name)
@@ -82,12 +81,6 @@ chrome.runtime.onMessage.addListener((message: WdkRequest, _sender, sendResponse
 
   return true
 })
-
-async function configureActionSurface(): Promise<void> {
-  if (chrome.sidePanel?.setPanelBehavior) {
-    await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
-  }
-}
 
 async function openWalletSurface(tab: chrome.tabs.Tab): Promise<void> {
   if (chrome.sidePanel?.open && tab.id) {
