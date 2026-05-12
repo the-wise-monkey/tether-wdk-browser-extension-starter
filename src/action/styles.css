@@ -216,6 +216,12 @@ h1 {
   line-height: 1.1;
 }
 
+.network-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
 .wallet-head button {
   width: 38px;
   padding: 0;
@@ -370,9 +376,221 @@ h1 {
   min-height: 38px;
 }
 
+.dropdown-field {
+  position: relative;
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+
+.dropdown-label {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.dropdown-trigger {
+  width: 100%;
+  min-height: 46px;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-color: rgba(212, 175, 55, 0.14);
+  background: #050505;
+  color: var(--text);
+}
+
+.dropdown-trigger.open,
+.dropdown-trigger:focus-visible {
+  border-color: var(--outline-strong);
+  box-shadow: 0 0 0 2px rgba(242, 202, 80, 0.11);
+}
+
+.dropdown-trigger > svg {
+  flex: 0 0 auto;
+  color: var(--text-muted);
+  transition: transform 150ms ease;
+}
+
+.dropdown-trigger.open > svg {
+  transform: rotate(180deg);
+}
+
+.dropdown-selected,
+.dropdown-option {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.dropdown-selected {
+  gap: 10px;
+}
+
+.dropdown-selected > span:not(.chain-icon, .asset-icon, .account-icon),
+.dropdown-option > span:not(.chain-icon, .asset-icon, .account-icon) {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  text-align: left;
+}
+
+.dropdown-selected strong,
+.dropdown-option strong {
+  overflow: hidden;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 850;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdown-selected small,
+.dropdown-option small {
+  overflow: hidden;
+  color: var(--text-faint);
+  font-size: 11px;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdown-field.compact .dropdown-trigger {
+  min-height: 42px;
+}
+
+.dropdown-field.compact .dropdown-selected strong {
+  font-size: 13px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 7px);
+  left: 0;
+  right: 0;
+  display: grid;
+  gap: 5px;
+  max-height: 286px;
+  overflow: auto;
+  padding: 7px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: var(--radius-md);
+  background:
+    radial-gradient(circle at 88% 0%, rgba(242, 202, 80, 0.09), transparent 34%),
+    rgba(8, 8, 8, 0.96);
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.72),
+    inset 1px 1px 0 rgba(242, 202, 80, 0.1);
+  backdrop-filter: blur(20px);
+}
+
+.dropdown-option {
+  position: relative;
+  justify-content: flex-start;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 34px 8px 8px;
+  border-color: transparent;
+  background: transparent;
+  color: var(--text);
+}
+
+.dropdown-option:hover,
+.dropdown-option.selected {
+  border-color: rgba(242, 202, 80, 0.24);
+  background: rgba(212, 175, 55, 0.1);
+}
+
+.dropdown-option.selected strong {
+  color: var(--gold-soft);
+}
+
+.dropdown-check {
+  position: absolute;
+  right: 10px;
+  color: var(--gold-bright);
+}
+
+.chain-icon,
+.asset-icon,
+.account-icon {
+  position: relative;
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid rgba(242, 202, 80, 0.24);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 224, 136, 0.34), transparent 48%),
+    linear-gradient(145deg, #1d1d1b, #080808);
+  color: var(--gold-bright);
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1;
+  box-shadow: 0 0 18px rgba(212, 175, 55, 0.1);
+}
+
+.chain-icon-ethereum {
+  color: #d9d2ff;
+}
+
+.chain-icon-polygon {
+  color: #c7a6ff;
+}
+
+.chain-icon-arbitrum {
+  color: #8ebcff;
+}
+
+.chain-icon-plasma {
+  color: #fff0a6;
+}
+
+.chain-icon-bitcoin {
+  color: #f7931a;
+}
+
+.chain-icon-spark {
+  color: #ffd35a;
+}
+
+.chain-icon-solana {
+  gap: 2px;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 224, 136, 0.18), transparent 48%),
+    #070707;
+}
+
+.chain-icon-solana i {
+  width: 15px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #9945ff, #14f195);
+}
+
+.chain-icon-solana i:nth-child(2) {
+  transform: translateX(-2px);
+}
+
+.chain-icon-solana i:nth-child(3) {
+  transform: translateX(2px);
+}
+
+.asset-icon,
+.account-icon {
+  color: var(--gold-soft);
+  font-size: 12px;
+}
+
 .controls-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 128px;
+  grid-template-columns: minmax(0, 1fr) 144px;
   gap: 10px;
 }
 

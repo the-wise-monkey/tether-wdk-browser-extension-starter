@@ -1,7 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   Activity,
+  Check,
+  ChevronDown,
   Copy,
   Eye,
   EyeOff,
@@ -105,6 +107,119 @@ function Banner({ tone, text }: { tone: 'error' | 'info' | 'warning'; text: stri
       <ShieldAlert size={15} />
       <span>{text}</span>
     </div>
+  )
+}
+
+type DropdownOption<T extends string | number> = {
+  value: T
+  label: string
+  detail?: string
+  icon?: React.ReactNode
+}
+
+function Dropdown<T extends string | number>({
+  label,
+  value,
+  options,
+  onChange,
+  compact = false
+}: {
+  label: string
+  value: T
+  options: Array<DropdownOption<T>>
+  onChange: (value: T) => void
+  compact?: boolean
+}) {
+  const [open, setOpen] = useState(false)
+  const selected = options.find((option) => option.value === value) ?? options[0]
+  const rootRef = useRef<HTMLDivElement>(null)
+
+  return (
+    <div
+      className={`dropdown-field${compact ? ' compact' : ''}`}
+      ref={rootRef}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false)
+      }}
+    >
+      <span className="dropdown-label">{label}</span>
+      <button
+        type="button"
+        className={`dropdown-trigger${open ? ' open' : ''}`}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => setOpen((value) => !value)}
+      >
+        <span className="dropdown-selected">
+          {selected?.icon}
+          <span>
+            <strong>{selected?.label}</strong>
+            {selected?.detail && <small>{selected.detail}</small>}
+          </span>
+        </span>
+        <ChevronDown size={16} />
+      </button>
+      {open && (
+        <div className="dropdown-menu" role="listbox">
+          {options.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              className={`dropdown-option${option.value === selected?.value ? ' selected' : ''}`}
+              role="option"
+              aria-selected={option.value === selected?.value}
+              onClick={() => {
+                onChange(option.value)
+                setOpen(false)
+              }}
+            >
+              {option.icon}
+              <span>
+                <strong>{option.label}</strong>
+                {option.detail && <small>{option.detail}</small>}
+              </span>
+              {option.value === selected?.value && <Check className="dropdown-check" size={15} />}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function ChainIcon({ id }: { id: ChainId }) {
+  if (id === 'solana') {
+    return (
+      <span className="chain-icon chain-icon-solana" aria-hidden="true">
+        <i />
+        <i />
+        <i />
+      </span>
+    )
+  }
+
+  const labels: Record<ChainId, string> = {
+    ethereum: '◆',
+    polygon: '⬡',
+    arbitrum: 'A',
+    plasma: 'P',
+    bitcoin: '₿',
+    spark: 'ϟ',
+    solana: ''
+  }
+
+  return (
+    <span className={`chain-icon chain-icon-${id}`} aria-hidden="true">
+      {labels[id]}
+    </span>
+  )
+}
+
+function AssetIcon({ symbol }: { symbol: string }) {
+  return (
+    <span className="asset-icon" aria-hidden="true">
+      {symbol.slice(0, 1)}
+    </span>
   )
 }
 
@@ -236,7 +351,10 @@ function Header({ snapshot }: { snapshot: WalletStateSnapshot }) {
     <section className="wallet-head">
       <div>
         <div className="muted">{selectedWallet?.name ?? 'Wallet'}</div>
-        <strong>{selectedNetwork?.label}</strong>
+        <strong className="network-title">
+          {selectedNetwork && <ChainIcon id={selectedNetwork.id} />}
+          {selectedNetwork?.label}
+        </strong>
       </div>
       <div className="header-actions">
         <button
@@ -310,48 +428,53 @@ function Assets({ snapshot }: { snapshot: WalletStateSnapshot }) {
 
 function NetworkAccountControls({ snapshot }: { snapshot: WalletStateSnapshot }) {
   const dispatch = useDispatch()
+  const networkOptions = snapshot.networks.map((network) => ({
+    value: network.id,
+    label: network.label,
+    detail: `${network.symbol}${network.chainId ? ` · ${network.chainId}` : ''}`,
+    icon: <ChainIcon id={network.id} />
+  }))
+  const accountOptions = Array.from({ length: snapshot.wallets[0]?.accountCount ?? 1 }).map((_, index) => ({
+    value: index,
+    label: `Account ${index + 1}`,
+    detail: `Index ${index}`,
+    icon: (
+      <span className="account-icon" aria-hidden="true">
+        {index + 1}
+      </span>
+    )
+  }))
+
   return (
     <div className="controls-grid">
-      <label className="field compact">
-        <span>Network</span>
-        <select
-          value={snapshot.selectedNetworkId}
-          onChange={(event) =>
-            run(dispatch, async () =>
-              sendMessage<WalletStateSnapshot>({
-                type: 'SET_SELECTED_NETWORK',
-                payload: { networkId: event.target.value as ChainId }
-              })
-            )
-          }
-        >
-          {snapshot.networks.map((network) => (
-            <option key={network.id} value={network.id}>
-              {network.label}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label className="field compact">
-        <span>Account</span>
-        <select
-          value={snapshot.selectedAccountIndex}
-          onChange={(event) =>
-            run(dispatch, async () =>
-              sendMessage<WalletStateSnapshot>({
-                type: 'SET_SELECTED_ACCOUNT',
-                payload: { accountIndex: Number(event.target.value) }
-              })
-            )
-          }
-        >
-          {Array.from({ length: snapshot.wallets[0]?.accountCount ?? 1 }).map((_, index) => (
-            <option key={index} value={index}>
-              Account {index + 1}
-            </option>
-          ))}
-        </select>
-      </label>
+      <Dropdown
+        compact
+        label="Network"
+        value={snapshot.selectedNetworkId}
+        options={networkOptions}
+        onChange={(networkId) =>
+          run(dispatch, async () =>
+            sendMessage<WalletStateSnapshot>({
+              type: 'SET_SELECTED_NETWORK',
+              payload: { networkId }
+            })
+          )
+        }
+      />
+      <Dropdown
+        compact
+        label="Account"
+        value={snapshot.selectedAccountIndex}
+        options={accountOptions}
+        onChange={(accountIndex) =>
+          run(dispatch, async () =>
+            sendMessage<WalletStateSnapshot>({
+              type: 'SET_SELECTED_ACCOUNT',
+              payload: { accountIndex }
+            })
+          )
+        }
+      />
     </div>
   )
 }
@@ -397,16 +520,17 @@ function SendPanel({ snapshot }: { snapshot: WalletStateSnapshot }) {
   return (
     <section className="panel">
       <NetworkAccountControls snapshot={snapshot} />
-      <label className="field">
-        <span>Asset</span>
-        <select value={assetId} onChange={(event) => setAssetId(event.target.value as AssetId)}>
-          {selectedNetwork.assets.map((asset) => (
-            <option key={asset.id} value={asset.id}>
-              {asset.symbol}
-            </option>
-          ))}
-        </select>
-      </label>
+      <Dropdown
+        label="Asset"
+        value={assetId}
+        options={selectedNetwork.assets.map((asset) => ({
+          value: asset.id,
+          label: asset.symbol,
+          detail: asset.name,
+          icon: <AssetIcon symbol={asset.symbol} />
+        }))}
+        onChange={setAssetId}
+      />
       <label className="field">
         <span>Recipient</span>
         <input value={to} onChange={(event) => setTo(event.target.value)} placeholder="Address" />
@@ -466,19 +590,17 @@ function ReceivePanel({ snapshot }: { snapshot: WalletStateSnapshot }) {
 function ActivityPanel({ snapshot }: { snapshot: WalletStateSnapshot }) {
   const [status, setStatus] = useState('all')
   const txs = snapshot.txs.filter((tx) => status === 'all' || tx.status === status)
+  const statusOptions = [
+    { value: 'all', label: 'All', detail: 'Every status' },
+    { value: 'queued', label: 'Queued', detail: 'Waiting to send' },
+    { value: 'broadcast', label: 'Broadcast', detail: 'Sent to network' },
+    { value: 'confirmed', label: 'Confirmed', detail: 'Finalized' },
+    { value: 'failed', label: 'Failed', detail: 'Needs review' }
+  ]
 
   return (
     <section className="panel">
-      <label className="field compact">
-        <span>Status</span>
-        <select value={status} onChange={(event) => setStatus(event.target.value)}>
-          <option value="all">All</option>
-          <option value="queued">Queued</option>
-          <option value="broadcast">Broadcast</option>
-          <option value="confirmed">Confirmed</option>
-          <option value="failed">Failed</option>
-        </select>
-      </label>
+      <Dropdown label="Status" value={status} options={statusOptions} onChange={setStatus} compact />
       <div className="list">
         {txs.length === 0 && <div className="empty">No transactions yet.</div>}
         {txs.map((tx) => (
