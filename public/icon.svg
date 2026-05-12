@@ -1,12 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Tether WDK Wallet">
-  <defs>
-    <radialGradient id="goldGlow" cx="50%" cy="25%" r="70%">
-      <stop offset="0%" stop-color="#ffe088"/>
-      <stop offset="48%" stop-color="#d4af37"/>
-      <stop offset="100%" stop-color="#735c00"/>
-    </radialGradient>
-  </defs>
-  <rect width="128" height="128" rx="28" fill="#080808"/>
-  <circle cx="64" cy="64" r="44" fill="#131313" stroke="#d4af37" stroke-opacity=".45" stroke-width="2"/>
-  <path fill="url(#goldGlow)" d="M36 36h56v13H70v10c14 .7 24 3.6 24 7.1s-10 6.4-24 7.1v19H58V73.2c-14-.7-24-3.6-24-7.1s10-6.4 24-7.1V49H36V36Zm28 31.1c9.8 0 17.8-.8 17.8-1.9 0-1-8-1.9-17.8-1.9s-17.8.8-17.8 1.9c0 1 8 1.9 17.8 1.9Z"/>
+  <rect width="128" height="128" fill="#0a0a0a"/>
+  <rect x="1.5" y="1.5" width="125" height="125" fill="none" stroke="#ff4d00" stroke-width="3"/>
+  <path fill="#ff4d00" d="M36 36h56v13H70v10c14 .7 24 3.6 24 7.1s-10 6.4-24 7.1v19H58V73.2c-14-.7-24-3.6-24-7.1s10-6.4 24-7.1V49H36V36Zm28 31.1c9.8 0 17.8-.8 17.8-1.9 0-1-8-1.9-17.8-1.9s-17.8.8-17.8 1.9c0 1 8 1.9 17.8 1.9Z"/>
 </svg>

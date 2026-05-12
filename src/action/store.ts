@@ -6,7 +6,6 @@ interface UiState {
   snapshot?: WalletStateSnapshot
   busy: boolean
   error?: string
-  notice?: string
 }
 
 const initialState: UiState = {
@@ -26,14 +25,11 @@ const uiSlice = createSlice({
     },
     setError(state, action: PayloadAction<string | undefined>) {
       state.error = action.payload
-    },
-    setNotice(state, action: PayloadAction<string | undefined>) {
-      state.notice = action.payload
     }
   }
 })
 
-export const { setBusy, setSnapshot, setError, setNotice } = uiSlice.actions
+export const { setBusy, setSnapshot, setError } = uiSlice.actions
 
 export const store = configureStore({
   reducer: {
