@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Tether WDK Wallet">
+  <rect width="128" height="128" rx="28" fill="#0b1f1a"/>
+  <circle cx="64" cy="64" r="42" fill="#26a17b"/>
+  <path fill="#fff" d="M36 36h56v13H70v10c14 .7 24 3.6 24 7.1s-10 6.4-24 7.1v19H58V73.2c-14-.7-24-3.6-24-7.1s10-6.4 24-7.1V49H36V36Zm28 31.1c9.8 0 17.8-.8 17.8-1.9 0-1-8-1.9-17.8-1.9s-17.8.8-17.8 1.9c0 1 8 1.9 17.8 1.9Z"/>
+</svg>
