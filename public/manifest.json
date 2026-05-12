@@ -4,7 +4,7 @@
   "short_name": "WDK Wallet",
   "version": "0.1.0",
   "description": "Reference Chrome/Brave extension wallet starter built with Tether WDK.",
-  "permissions": ["storage", "alarms", "activeTab", "clipboardRead", "clipboardWrite"],
+  "permissions": ["storage", "alarms", "activeTab", "clipboardRead", "clipboardWrite", "sidePanel"],
   "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "background.js",
@@ -33,8 +33,11 @@
     }
   ],
   "action": {
-    "default_popup": "index.html",
+    "default_title": "Open WDK Wallet",
     "default_icon": "icon.svg"
+  },
+  "side_panel": {
+    "default_path": "index.html"
   },
   "icons": {
     "16": "icon.svg",

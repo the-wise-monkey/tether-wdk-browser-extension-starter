@@ -1,6 +1,8 @@
 import type { WdkRequest, WdkResponse } from '../shared/types'
 import { walletSession } from './session'
 
+const WALLET_UI_PATH = 'index.html'
+
 function ok<T>(result: T): WdkResponse<T> {
   return { ok: true, result }
 }
@@ -58,6 +60,15 @@ async function handleMessage(message: WdkRequest): Promise<WdkResponse> {
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.alarms.create('wdk-wallet-background-ready', { delayInMinutes: 1 })
+  void configureActionSurface()
+})
+
+chrome.runtime.onStartup.addListener(() => {
+  void configureActionSurface()
+})
+
+chrome.action.onClicked.addListener((tab) => {
+  void openWalletSurface(tab)
 })
 
 chrome.alarms.onAlarm.addListener((alarm) => {
@@ -71,3 +82,27 @@ chrome.runtime.onMessage.addListener((message: WdkRequest, _sender, sendResponse
 
   return true
 })
+
+async function configureActionSurface(): Promise<void> {
+  if (chrome.sidePanel?.setPanelBehavior) {
+    await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
+  }
+}
+
+async function openWalletSurface(tab: chrome.tabs.Tab): Promise<void> {
+  if (chrome.sidePanel?.open && tab.id) {
+    try {
+      await chrome.sidePanel.open({ tabId: tab.id })
+      return
+    } catch {
+      // Fall through to a popup window for Chromium builds without side panel support.
+    }
+  }
+
+  await chrome.windows.create({
+    url: chrome.runtime.getURL(WALLET_UI_PATH),
+    type: 'popup',
+    width: 420,
+    height: 720
+  })
+}

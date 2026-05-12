@@ -12,9 +12,9 @@ flowchart TD
   Content -->|"chrome.runtime.sendMessage"| Background
 ```
 
-## Popup
+## Side Panel
 
-The popup owns user-facing state and sends typed commands to the background worker. It never sees a private key. It can request seed generation during onboarding, but after creation/restoration the seed is encrypted and only the background can decrypt it.
+The side panel owns user-facing state and sends typed commands to the background worker. It never sees a private key. It can request seed generation during onboarding, but after creation/restoration the seed is encrypted and only the background can decrypt it.
 
 Main screens:
 

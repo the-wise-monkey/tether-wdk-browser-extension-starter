@@ -9,7 +9,7 @@ Reference Chrome/Brave extension wallet starter built with Tether WDK. It follow
 - Keep the decrypted seed only in background service worker memory while unlocked.
 - Derive accounts through `@tetherto/wdk` and modules for EVM, Bitcoin, Spark, and Solana.
 - Preconfigured networks: Ethereum, Polygon, Arbitrum, Plasma, Bitcoin, Spark, Solana.
-- Popup flows for balances, send quote/send, receive QR, transaction activity, multi-account, and auto-lock timeout.
+- Side panel UI for balances, send quote/send, receive QR, transaction activity, multi-account, and auto-lock timeout.
 - Injected starter providers for dApps: `window.ethereum` and `window.solana`.
 
 ## Install
@@ -25,6 +25,8 @@ Then load `dist/` as an unpacked extension in Chrome or Brave:
 2. Enable Developer mode.
 3. Click "Load unpacked".
 4. Select this repo's `dist/` directory.
+
+Click the extension icon to open the wallet. Chrome opens it in the browser side panel. Chromium builds without Side Panel support fall back to a wallet popup window.
 
 ## Development
 
