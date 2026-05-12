@@ -1,5 +1,12 @@
 # Browser Extension Starter Submission
 
+## Status
+
+- Submitted: 2026-05-12
+- Response: `success:true` from Tether bounty application endpoint.
+- Follow-up target: 2026-05-26 if no reply.
+- Public repo: https://github.com/the-wise-monkey/tether-wdk-browser-extension-starter
+
 ## Form Fields
 
 | Field | Value |
