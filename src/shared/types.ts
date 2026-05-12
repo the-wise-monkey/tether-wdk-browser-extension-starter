@@ -15,6 +15,8 @@ export type TxStatus = 'queued' | 'broadcast' | 'confirmed' | 'failed'
 
 export type TxDirection = 'incoming' | 'outgoing'
 
+export type OpenMode = 'popup' | 'side-panel'
+
 export interface AssetConfig {
   id: AssetId
   symbol: string
@@ -104,6 +106,7 @@ export interface WalletStateSnapshot {
   txs: TxRecord[]
   networks: NetworkConfig[]
   lockTimeoutMinutes: number
+  openMode: OpenMode
   warnings: string[]
 }
 
@@ -123,6 +126,7 @@ export type WdkRequest =
   | { type: 'QUOTE_SEND'; payload: SendDraft }
   | { type: 'SEND'; payload: SendDraft }
   | { type: 'SET_LOCK_TIMEOUT'; payload: { minutes: number } }
+  | { type: 'SET_OPEN_MODE'; payload: { mode: OpenMode } }
   | { type: 'PROVIDER_REQUEST'; payload: ProviderRequest }
 
 export interface WdkResponse<T = unknown> {

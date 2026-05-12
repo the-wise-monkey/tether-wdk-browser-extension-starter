@@ -1,4 +1,4 @@
-import type { ChainId, TxRecord, WalletSummary } from '../shared/types'
+import type { ChainId, OpenMode, TxRecord, WalletSummary } from '../shared/types'
 
 export interface EncryptedSeedEnvelope {
   version: 1
@@ -20,6 +20,7 @@ export interface StoredState {
   selectedAccountIndex: number
   selectedNetworkId: ChainId
   lockTimeoutMinutes: number
+  openMode: OpenMode
   txs: TxRecord[]
 }
 
@@ -30,6 +31,7 @@ const DEFAULT_STATE: StoredState = {
   selectedAccountIndex: 0,
   selectedNetworkId: 'ethereum',
   lockTimeoutMinutes: 15,
+  openMode: 'popup',
   txs: []
 }
 

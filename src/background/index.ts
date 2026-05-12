@@ -1,7 +1,22 @@
-import type { WdkRequest, WdkResponse } from '../shared/types'
+import type { OpenMode, WdkRequest, WdkResponse } from '../shared/types'
+import { loadStoredState } from './storage'
 import { walletSession } from './session'
 
 const WALLET_UI_PATH = 'index.html'
+
+async function applyOpenMode(mode: OpenMode): Promise<void> {
+  if (mode === 'side-panel') {
+    if (chrome.action?.setPopup) await chrome.action.setPopup({ popup: '' })
+    if (chrome.sidePanel?.setPanelBehavior) {
+      await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
+    }
+  } else {
+    if (chrome.action?.setPopup) await chrome.action.setPopup({ popup: WALLET_UI_PATH })
+    if (chrome.sidePanel?.setPanelBehavior) {
+      await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false })
+    }
+  }
+}
 
 function ok<T>(result: T): WdkResponse<T> {
   return { ok: true, result }
@@ -51,6 +66,11 @@ async function handleMessage(message: WdkRequest): Promise<WdkResponse> {
       return ok(await walletSession.send(message.payload))
     case 'SET_LOCK_TIMEOUT':
       return ok(await walletSession.setLockTimeout(message.payload.minutes))
+    case 'SET_OPEN_MODE': {
+      const snapshot = await walletSession.setOpenMode(message.payload.mode)
+      await applyOpenMode(message.payload.mode)
+      return ok(snapshot)
+    }
     case 'PROVIDER_REQUEST':
       return ok(await walletSession.handleProviderRequest(message.payload))
     default:
@@ -60,15 +80,18 @@ async function handleMessage(message: WdkRequest): Promise<WdkResponse> {
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.alarms.create('wdk-wallet-background-ready', { delayInMinutes: 1 })
+  void loadStoredState().then((state) => applyOpenMode(state.openMode))
 })
 
-if (chrome.sidePanel?.setPanelBehavior) {
-  void chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
-} else {
-  chrome.action.onClicked.addListener((tab) => {
-    void openWalletSurface(tab)
-  })
-}
+chrome.runtime.onStartup.addListener(() => {
+  void loadStoredState().then((state) => applyOpenMode(state.openMode))
+})
+
+void loadStoredState().then((state) => applyOpenMode(state.openMode))
+
+chrome.action.onClicked.addListener((tab) => {
+  void openWalletSurface(tab)
+})
 
 chrome.alarms.onAlarm.addListener((alarm) => {
   walletSession.handleAlarm(alarm.name)

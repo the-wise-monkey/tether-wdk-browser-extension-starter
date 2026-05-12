@@ -1,6 +1,7 @@
 import type {
   AccountSummary,
   ChainId,
+  OpenMode,
   ProviderRequest,
   SendDraft,
   TxRecord,
@@ -38,6 +39,7 @@ class WalletSession {
       txs: stored.txs,
       networks: NETWORKS,
       lockTimeoutMinutes: stored.lockTimeoutMinutes,
+      openMode: stored.openMode,
       warnings
     }
   }
@@ -60,12 +62,14 @@ class WalletSession {
       encryptedSeed
     }
 
+    const previous = await loadStoredState()
     const stored: StoredState = {
       wallets: [wallet],
       selectedWalletId: wallet.id,
       selectedAccountIndex: 0,
       selectedNetworkId: 'ethereum',
       lockTimeoutMinutes: 15,
+      openMode: previous.openMode,
       txs: []
     }
 
@@ -120,6 +124,12 @@ class WalletSession {
     const normalized = Math.max(1, Math.min(120, Math.round(minutes)))
     await patchStoredState({ lockTimeoutMinutes: normalized })
     this.touch(normalized)
+    return this.getState()
+  }
+
+  async setOpenMode(mode: OpenMode): Promise<WalletStateSnapshot> {
+    await patchStoredState({ openMode: mode })
+    await this.keepAlive()
     return this.getState()
   }
 
