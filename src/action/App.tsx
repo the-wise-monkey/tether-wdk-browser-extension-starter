@@ -134,16 +134,22 @@ function Onboarding() {
   }
 
   return (
-    <section className="screen">
+    <form
+      className="screen"
+      onSubmit={(event) => {
+        event.preventDefault()
+        void submit()
+      }}
+    >
       <div className="screen-title">
         <Wallet size={24} />
         <h1>{mode === 'create' ? 'Create wallet' : 'Restore wallet'}</h1>
       </div>
       <div className="segmented">
-        <button className={mode === 'create' ? 'active' : ''} onClick={() => setMode('create')}>
+        <button type="button" className={mode === 'create' ? 'active' : ''} onClick={() => setMode('create')}>
           Create
         </button>
-        <button className={mode === 'restore' ? 'active' : ''} onClick={() => setMode('restore')}>
+        <button type="button" className={mode === 'restore' ? 'active' : ''} onClick={() => setMode('restore')}>
           Restore
         </button>
       </div>
@@ -180,11 +186,11 @@ function Onboarding() {
           placeholder="10+ characters"
         />
       </label>
-      <button className="primary" type="button" onClick={submit}>
+      <button className="primary" type="submit">
         <KeyRound size={17} />
         Encrypt and continue
       </button>
-    </section>
+    </form>
   )
 }
 
@@ -193,7 +199,13 @@ function Unlock() {
   const [password, setPassword] = useState('')
 
   return (
-    <section className="screen">
+    <form
+      className="screen"
+      onSubmit={(event) => {
+        event.preventDefault()
+        void run(dispatch, async () => sendMessage<WalletStateSnapshot>({ type: 'UNLOCK', payload: { password } }))
+      }}
+    >
       <div className="screen-title">
         <Lock size={24} />
         <h1>Unlock</h1>
@@ -207,15 +219,11 @@ function Unlock() {
           onChange={(event) => setPassword(event.target.value)}
         />
       </label>
-      <button
-        className="primary"
-        type="button"
-        onClick={() => run(dispatch, async () => sendMessage<WalletStateSnapshot>({ type: 'UNLOCK', payload: { password } }))}
-      >
+      <button className="primary" type="submit">
         <KeyRound size={17} />
         Unlock wallet
       </button>
-    </section>
+    </form>
   )
 }
 
