@@ -804,6 +804,21 @@ h1 {
   font-size: 12px;
   font-weight: 800;
   line-height: 1;
+  overflow: hidden;
+}
+
+.chain-icon-image,
+.asset-icon-image {
+  border: none;
+  background: transparent;
+}
+
+.chain-icon img,
+.asset-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .chain-icon-ethereum {
@@ -958,6 +973,23 @@ h1 {
 }
 
 .row > div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.row-asset {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+}
+
+.row-asset .asset-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.row-asset > div {
   display: grid;
   gap: 3px;
   min-width: 0;

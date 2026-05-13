@@ -258,13 +258,11 @@ function Dropdown<T extends string | number>({
   )
 }
 
-function ChainIcon({ id }: { id: ChainId }) {
-  if (id === 'solana') {
+function ChainIcon({ id, iconUrl }: { id: ChainId; iconUrl?: string }) {
+  if (iconUrl) {
     return (
-      <span className="chain-icon chain-icon-solana" aria-hidden="true">
-        <i />
-        <i />
-        <i />
+      <span className="chain-icon chain-icon-image" aria-hidden="true">
+        <img src={iconUrl} alt="" />
       </span>
     )
   }
@@ -276,7 +274,7 @@ function ChainIcon({ id }: { id: ChainId }) {
     plasma: 'P',
     bitcoin: '₿',
     spark: 'ϟ',
-    solana: ''
+    solana: 'S'
   }
 
   return (
@@ -286,7 +284,14 @@ function ChainIcon({ id }: { id: ChainId }) {
   )
 }
 
-function AssetIcon({ symbol }: { symbol: string }) {
+function AssetIcon({ symbol, iconUrl }: { symbol: string; iconUrl?: string }) {
+  if (iconUrl) {
+    return (
+      <span className="asset-icon asset-icon-image" aria-hidden="true">
+        <img src={iconUrl} alt="" />
+      </span>
+    )
+  }
   return (
     <span className="asset-icon" aria-hidden="true">
       {symbol.slice(0, 1)}
@@ -429,7 +434,7 @@ function Header({ snapshot, view, onBack }: { snapshot: WalletStateSnapshot; vie
           <>
             <div className="muted">{PAGE_TITLES[view as Exclude<View, 'home'>]}</div>
             <strong className="network-title">
-              {selectedNetwork && <ChainIcon id={selectedNetwork.id} />}
+              {selectedNetwork && <ChainIcon id={selectedNetwork.id} iconUrl={selectedNetwork.iconUrl} />}
               {selectedNetwork?.label}
             </strong>
           </>
@@ -437,7 +442,7 @@ function Header({ snapshot, view, onBack }: { snapshot: WalletStateSnapshot; vie
           <>
             <div className="muted">{selectedWallet?.name ?? 'Wallet'}</div>
             <strong className="network-title">
-              {selectedNetwork && <ChainIcon id={selectedNetwork.id} />}
+              {selectedNetwork && <ChainIcon id={selectedNetwork.id} iconUrl={selectedNetwork.iconUrl} />}
               {selectedNetwork?.label}
             </strong>
           </>
@@ -506,9 +511,12 @@ function Home({ snapshot, onNavigate }: { snapshot: WalletStateSnapshot; onNavig
           const balance = balances.find((item) => item.assetId === asset.id)
           return (
             <div className="row" key={asset.id}>
-              <div>
-                <strong>{asset.symbol}</strong>
-                <span>{asset.name}</span>
+              <div className="row-asset">
+                <AssetIcon symbol={asset.symbol} iconUrl={asset.iconUrl} />
+                <div>
+                  <strong>{asset.symbol}</strong>
+                  <span>{asset.name}</span>
+                </div>
               </div>
               <div className="right">
                 {balancesPending ? (
@@ -532,7 +540,7 @@ function NetworkAccountControls({ snapshot }: { snapshot: WalletStateSnapshot })
     value: network.id,
     label: network.label,
     detail: `${network.symbol}${network.chainId ? ` · ${network.chainId}` : ''}`,
-    icon: <ChainIcon id={network.id} />
+    icon: <ChainIcon id={network.id} iconUrl={network.iconUrl} />
   }))
   const accountOptions = Array.from({ length: snapshot.wallets[0]?.accountCount ?? 1 }).map((_, index) => ({
     value: index,
@@ -628,7 +636,7 @@ function SendPanel({ snapshot }: { snapshot: WalletStateSnapshot }) {
           value: asset.id,
           label: asset.symbol,
           detail: asset.name,
-          icon: <AssetIcon symbol={asset.symbol} />
+          icon: <AssetIcon symbol={asset.symbol} iconUrl={asset.iconUrl} />
         }))}
         onChange={setAssetId}
       />

@@ -24,6 +24,7 @@ export interface AssetConfig {
   decimals: number
   tokenAddress?: string
   native?: boolean
+  iconUrl?: string
 }
 
 export interface NetworkConfig {
@@ -37,6 +38,7 @@ export interface NetworkConfig {
   explorerUrl?: string
   testnet?: boolean
   enabled: boolean
+  iconUrl?: string
   assets: AssetConfig[]
 }
 
