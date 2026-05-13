@@ -115,11 +115,11 @@ function Shell({
           </div>
         </div>
       )}
-      {error && <Banner tone="error" text={error} />}
       {warnings.map((warning) => (
         <Banner key={warning} tone="warning" text={warning} />
       ))}
       {children}
+      {error && <Banner tone="error" text={error} />}
       <footer className="powered-by">
         <span>Powered by</span>
         <img src="/wdk-logo.svg" alt="WDK" />
@@ -523,6 +523,9 @@ function Home({ snapshot, onNavigate }: { snapshot: WalletStateSnapshot; onNavig
                   <span className="skeleton skeleton-amount" aria-hidden="true" />
                 ) : (
                   <strong>{balance?.formatted ?? '0'}</strong>
+                )}
+                {!balancesPending && balance?.formattedValueUsd && (
+                  <span className="row-value-usd">{balance.formattedValueUsd}</span>
                 )}
                 {balance?.error && <span className="tiny error-text">{balance.error}</span>}
               </div>

@@ -467,10 +467,18 @@ h1 {
   gap: 10px;
   padding: 10px 12px;
   border-radius: 0;
-  margin-bottom: 10px;
   font-size: 12px;
   font-weight: 500;
   line-height: 1.4;
+}
+
+.banner-warning,
+.banner-info {
+  margin-bottom: 12px;
+}
+
+.banner-error {
+  margin-top: 12px;
 }
 
 .banner svg {
@@ -979,16 +987,17 @@ h1 {
   background: var(--surface-card-high);
 }
 
-.row > div {
+.row > div:not(.row-asset) {
   display: grid;
   gap: 3px;
   min-width: 0;
 }
 
 .row-asset {
-  display: flex !important;
+  display: flex;
   align-items: center;
   gap: 14px;
+  min-width: 0;
 }
 
 .row-asset .asset-icon {
@@ -1025,6 +1034,13 @@ h1 {
 .right span {
   font-family: "JetBrains Mono", monospace;
   font-size: 11px;
+}
+
+.row-value-usd {
+  color: var(--text-muted);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.02em;
 }
 
 .error-text {

@@ -25,6 +25,7 @@ export interface AssetConfig {
   tokenAddress?: string
   native?: boolean
   iconUrl?: string
+  coingeckoId?: string
 }
 
 export interface NetworkConfig {
@@ -63,6 +64,9 @@ export interface BalanceSummary {
   symbol: string
   value: string
   formatted: string
+  priceUsd?: number
+  valueUsd?: number
+  formattedValueUsd?: string
   stale?: boolean
   error?: string
 }

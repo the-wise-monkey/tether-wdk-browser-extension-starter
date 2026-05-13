@@ -7,6 +7,7 @@ import WalletManagerSpark from '@tetherto/wdk-wallet-spark'
 import { formatUnits, parseUnits } from '../shared/format'
 import { getNetwork, NETWORKS } from '../shared/networks'
 import type { AccountSummary, BalanceSummary, ChainId, SendDraft, TxRecord } from '../shared/types'
+import { getPricesUsd } from './prices'
 import { assertAddressLooksValid } from './security'
 
 const WDK_TIMEOUT_MS = 18_000
@@ -139,7 +140,7 @@ export class WdkWalletClient {
       }
     }
 
-    return balances
+    return enrichWithPrices(balances)
   }
 
   async quoteSend(draft: SendDraft): Promise<{ fee: string; formattedFee: string }> {
@@ -204,4 +205,37 @@ export class WdkWalletClient {
       // Keep the extension usable and still drop our top-level references.
     }
   }
+}
+
+async function enrichWithPrices(balances: BalanceSummary[]): Promise<BalanceSummary[]> {
+  const ids: string[] = []
+  for (const balance of balances) {
+    const network = NETWORKS.find((item) => item.id === balance.networkId)
+    const asset = network?.assets.find((item) => item.id === balance.assetId)
+    if (asset?.coingeckoId) ids.push(asset.coingeckoId)
+  }
+  if (ids.length === 0) return balances
+
+  const prices = await getPricesUsd(ids)
+
+  return balances.map((balance) => {
+    const network = NETWORKS.find((item) => item.id === balance.networkId)
+    const asset = network?.assets.find((item) => item.id === balance.assetId)
+    const price = asset?.coingeckoId ? prices[asset.coingeckoId] : undefined
+    if (typeof price !== 'number') return balance
+
+    const formatted = Number(balance.formatted)
+    const valueUsd = Number.isFinite(formatted) ? formatted * price : 0
+    return {
+      ...balance,
+      priceUsd: price,
+      valueUsd,
+      formattedValueUsd: formatUsd(valueUsd)
+    }
+  })
+}
+
+function formatUsd(value: number): string {
+  if (!Number.isFinite(value)) return '$0.00'
+  return value.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 })
 }

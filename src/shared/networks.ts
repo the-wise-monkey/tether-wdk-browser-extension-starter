@@ -33,9 +33,9 @@ export const NETWORKS: NetworkConfig[] = [
     enabled: true,
     iconUrl: ICON.ethereum,
     assets: [
-      { id: 'ETH', symbol: 'ETH', name: 'Ether', decimals: 18, native: true, iconUrl: ICON.ethereum },
-      { id: 'USDT', symbol: 'USDt', name: 'Tether USD', decimals: 6, tokenAddress: USDT_ETHEREUM, iconUrl: ICON.usdtEthereum },
-      { id: 'XAUT', symbol: 'XAUt', name: 'Tether Gold', decimals: 6, tokenAddress: XAUT_ETHEREUM, iconUrl: ICON.xautEthereum }
+      { id: 'ETH', symbol: 'ETH', name: 'Ether', decimals: 18, native: true, iconUrl: ICON.ethereum, coingeckoId: 'ethereum' },
+      { id: 'USDT', symbol: 'USDt', name: 'Tether USD', decimals: 6, tokenAddress: USDT_ETHEREUM, iconUrl: ICON.usdtEthereum, coingeckoId: 'tether' },
+      { id: 'XAUT', symbol: 'XAUt', name: 'Tether Gold', decimals: 6, tokenAddress: XAUT_ETHEREUM, iconUrl: ICON.xautEthereum, coingeckoId: 'tether-gold' }
     ]
   },
   {
@@ -50,8 +50,8 @@ export const NETWORKS: NetworkConfig[] = [
     enabled: true,
     iconUrl: ICON.polygon,
     assets: [
-      { id: 'MATIC', symbol: 'MATIC', name: 'Polygon', decimals: 18, native: true, iconUrl: ICON.polygon },
-      { id: 'USDT', symbol: 'USDt', name: 'Tether USD', decimals: 6, tokenAddress: USDT_POLYGON, iconUrl: ICON.usdtPolygon }
+      { id: 'MATIC', symbol: 'MATIC', name: 'Polygon', decimals: 18, native: true, iconUrl: ICON.polygon, coingeckoId: 'polygon-ecosystem-token' },
+      { id: 'USDT', symbol: 'USDt', name: 'Tether USD', decimals: 6, tokenAddress: USDT_POLYGON, iconUrl: ICON.usdtPolygon, coingeckoId: 'tether' }
     ]
   },
   {
@@ -66,8 +66,8 @@ export const NETWORKS: NetworkConfig[] = [
     enabled: true,
     iconUrl: ICON.arbitrum,
     assets: [
-      { id: 'ETH', symbol: 'ETH', name: 'Ether', decimals: 18, native: true, iconUrl: ICON.arbitrum },
-      { id: 'USDT', symbol: 'USDt', name: 'Tether USD', decimals: 6, tokenAddress: USDT_ARBITRUM, iconUrl: ICON.usdtArbitrum }
+      { id: 'ETH', symbol: 'ETH', name: 'Ether', decimals: 18, native: true, iconUrl: ICON.arbitrum, coingeckoId: 'ethereum' },
+      { id: 'USDT', symbol: 'USDt', name: 'Tether USD', decimals: 6, tokenAddress: USDT_ARBITRUM, iconUrl: ICON.usdtArbitrum, coingeckoId: 'tether' }
     ]
   },
   {
@@ -82,8 +82,8 @@ export const NETWORKS: NetworkConfig[] = [
     enabled: true,
     iconUrl: ICON.plasma,
     assets: [
-      { id: 'XPL', symbol: 'XPL', name: 'Plasma', decimals: 18, native: true, iconUrl: ICON.plasma },
-      { id: 'USDT', symbol: 'USDt', name: 'Tether USD', decimals: 6, tokenAddress: USDT_PLASMA, iconUrl: ICON.usdtPlasma }
+      { id: 'XPL', symbol: 'XPL', name: 'Plasma', decimals: 18, native: true, iconUrl: ICON.plasma, coingeckoId: 'plasma' },
+      { id: 'USDT', symbol: 'USDt', name: 'Tether USD', decimals: 6, tokenAddress: USDT_PLASMA, iconUrl: ICON.usdtPlasma, coingeckoId: 'tether' }
     ]
   },
   {
@@ -95,7 +95,7 @@ export const NETWORKS: NetworkConfig[] = [
     explorerUrl: 'https://mempool.space',
     enabled: true,
     iconUrl: ICON.bitcoin,
-    assets: [{ id: 'BTC', symbol: 'BTC', name: 'Bitcoin', decimals: 8, native: true, iconUrl: ICON.bitcoin }]
+    assets: [{ id: 'BTC', symbol: 'BTC', name: 'Bitcoin', decimals: 8, native: true, iconUrl: ICON.bitcoin, coingeckoId: 'bitcoin' }]
   },
   {
     id: 'spark',
@@ -105,7 +105,7 @@ export const NETWORKS: NetworkConfig[] = [
     decimals: 8,
     explorerUrl: 'https://sparkscan.io',
     enabled: true,
-    assets: [{ id: 'BTC', symbol: 'BTC', name: 'Bitcoin on Spark', decimals: 8, native: true, iconUrl: ICON.bitcoin }]
+    assets: [{ id: 'BTC', symbol: 'BTC', name: 'Bitcoin on Spark', decimals: 8, native: true, iconUrl: ICON.bitcoin, coingeckoId: 'bitcoin' }]
   },
   {
     id: 'solana',
@@ -118,8 +118,8 @@ export const NETWORKS: NetworkConfig[] = [
     enabled: true,
     iconUrl: ICON.solana,
     assets: [
-      { id: 'SOL', symbol: 'SOL', name: 'Solana', decimals: 9, native: true, iconUrl: ICON.solana },
-      { id: 'USDT', symbol: 'USDt', name: 'Tether USD', decimals: 6 }
+      { id: 'SOL', symbol: 'SOL', name: 'Solana', decimals: 9, native: true, iconUrl: ICON.solana, coingeckoId: 'solana' },
+      { id: 'USDT', symbol: 'USDt', name: 'Tether USD', decimals: 6, coingeckoId: 'tether' }
     ]
   }
 ]
