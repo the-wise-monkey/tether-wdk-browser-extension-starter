@@ -394,19 +394,24 @@ h1 {
 
 .wallet-head {
   justify-content: space-between;
-  align-items: stretch;
-  margin-bottom: 14px;
-  padding: 14px 16px;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 16px 18px;
   border: 1px solid var(--outline-strong);
   border-left: 2px solid var(--primary);
   border-radius: 0;
   background: var(--surface-card);
 }
 
+.wallet-head .chain-icon {
+  width: 32px;
+  height: 32px;
+}
+
 .wallet-head > div:first-child,
 .wallet-head-main {
   display: grid;
-  gap: 4px;
+  gap: 6px;
   min-width: 0;
 }
 
@@ -423,7 +428,7 @@ h1 {
 .network-title {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .wallet-head button {
@@ -809,12 +814,14 @@ h1 {
 
 .chain-icon-image,
 .asset-icon-image {
+  display: block;
   border: none;
   background: transparent;
+  padding: 0;
 }
 
-.chain-icon img,
-.asset-icon img {
+.chain-icon-image img,
+.asset-icon-image img {
   display: block;
   width: 100%;
   height: 100%;
@@ -981,17 +988,17 @@ h1 {
 .row-asset {
   display: flex !important;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 
 .row-asset .asset-icon {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
 }
 
 .row-asset > div {
   display: grid;
-  gap: 3px;
+  gap: 6px;
   min-width: 0;
 }
 

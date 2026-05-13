@@ -14,7 +14,7 @@ const ICON = {
   bitcoin: '/assets/chains/bitcoin.png',
   solana: '/assets/chains/solana.png',
   usdtEthereum: '/assets/tokens/usdt-ethereum.png',
-  xautEthereum: '/assets/tokens/xaut-ethereum.png',
+  xautEthereum: '/assets/tokens/xaut-ethereum.svg',
   usdtPolygon: '/assets/tokens/usdt-polygon.png',
   usdtArbitrum: '/assets/tokens/usdt-arbitrum.png',
   usdtPlasma: '/assets/tokens/usdt-plasma.png'
